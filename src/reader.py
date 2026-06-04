@@ -8,5 +8,6 @@ class ReadData:
         self.json_data=None
         self.api_data=None
     
-
+    def read_csv(self,filename):
+        
     
