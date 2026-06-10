@@ -1,5 +1,6 @@
-import pandas as pd
+from src import reader
 
-data = pd.read_csv("data\\raw\\gym_members_exercise_tracking.csv")
+reading = reader.ReadData("ETL.log")
+data = reading.read_csv("data\\raw\\gym_members_exercise_tracking.csv")
 
-print(data.head)
+print(data.info)
