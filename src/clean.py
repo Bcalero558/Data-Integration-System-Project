@@ -7,13 +7,8 @@ class Cleaner:
         self.data= df.copy
         
 
-    def clean(self) -> pd.DataFrame:
-        unique = self.data.drop_duplicates()
-        dupe = self.data[self.data.duplicated()]
+    def clean_row(self) :
+        pass
+        
 
-        if len(dupe) > 0:
-            dupe['reason'] = 'Duplicate' 
-        dupe.to_csv('rejected.csv', index = False)
-        return unique
-    
         

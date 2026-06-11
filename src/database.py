@@ -1,6 +1,6 @@
 import psycopg2
+from psycopg2.extras import RealDictCursor
 import pandas as pd
-from sqlalchemy import create_engine
 
 class DatabaseOperations:
     data = pd.DataFrame()
@@ -11,7 +11,7 @@ class DatabaseOperations:
 
     #connect to postgres
     #todo:
-    def connect_to_database():
+    def connect_to_database(self):
         try:
             conn = psycopg2.connect(
                 dbname = "ETL_pipeline_project",
@@ -26,26 +26,26 @@ class DatabaseOperations:
             print("Failed to Connect")
 
     #Create table
-    def create_table(conn):
+    def create_table(self,conn):
         cursor = conn.cursor()
         cursor.execute(
         """
-            CREATE TABLE IF NOT EXIST members(
+            CREATE TABLE IF NOT EXISTS members(
             id SERIAL PRIMARY KEY,
-            age INT NOT NULL
-            gender VARCHAR(6)
+            age INT NOT NULL,
+            gender VARCHAR(6),
             weight DECIMAL(4,1),
             height DECIMAL(3,2),
-            max_bpm INT NOT NULL
-            avg_bpm INT NOT NULL
-            resting_bpm INT NOT NULL
-            session_duration DECIMAL(3,2)
-            calories_burned DECIMAL(5,1)
-            workout_type VARCHAR(255)
-            fat_percentage DECIMAL(3,1)
-            water_intake DECIMAL(2,1)
-            Workout_Frequency INT NOT NULL
-            experience_level INT NOT NULL
+            max_bpm INT NOT NULL,
+            avg_bpm INT NOT NULL,
+            resting_bpm INT NOT NULL,
+            session_duration DECIMAL(3,2),
+            calories_burned DECIMAL(5,1),
+            workout_type VARCHAR(255),
+            fat_percentage DECIMAL(3,1),
+            water_intake DECIMAL(2,1),
+            Workout_Frequency INT NOT NULL,
+            experience_level INT NOT NULL,
             bmi DECIMAL(4,2)
             )
 
@@ -53,10 +53,10 @@ class DatabaseOperations:
         )
         conn.commit()
         print("Created Table Successfully")
-        
+
     #add elements to table
     def insert_data(self,conn):
-        data_list = self.data.list()
+        data_list = self.data.to_records(index = False)
         query = """
         INSERT INTO members (
         age,gender,weight,height,max_bpm,avg_bpm,resting_bpm,session_duration,
@@ -69,21 +69,21 @@ class DatabaseOperations:
                 query,
                 [
                     (
-                        row["Age"],
+                        int(row["Age"]),
                         row["Gender"],
-                        row["Weight (kg)"],
-                        row["Height (m)"],
-                        row["Max_BPM"],
-                        row["Avg_BPM"],
-                        row["Resting_BPM"],
-                        row["Session_Duration (hours)"],
-                        row["Calories_Burned"],
+                        float(row["Weight (kg)"]),
+                        float(row["Height (m)"]),
+                        int(row["Max_BPM"]),
+                        int(row["Avg_BPM"]),
+                        int(row["Resting_BPM"]),
+                        float(row["Session_Duration (hours)"]),
+                        float(row["Calories_Burned"]),
                         row["Workout_Type"],
-                        row["Fat_Percentage"],
-                        row["Water_Intake (liters)"],
-                        row["Workout_Frequency (days/week)"],
-                        row["Experience_Level"],
-                        row["BMI"]
+                        float(row["Fat_Percentage"]),
+                        float(row["Water_Intake (liters)"]),
+                        int(row["Workout_Frequency (days/week)"]),
+                        int(row["Experience_Level"]),
+                        float(row["BMI"])
                     )
                     for row in data_list
                 ],
