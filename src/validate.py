@@ -16,11 +16,20 @@ class Validator:
     # TODO:cleans and formats data for proper use
     def validate_rows(self, condition,data) :
 
-        accepted_row = data
-        rejected_row = pd.DataFrame()
-        for i in condition:
-            rejected_row = rejected_row.append(accepted_row[~i], ignore_index = True)
-            accepted_row = accepted_row[i]
+        #determines if there are any duplicates in the data
+        duplicates = data.duplicated()
+
+        #accepts data without duplicates and saves data with duplicates
+        accepted_row = data.drop_duplicates( keep ='first')
+        rejected_row = data[duplicates].assign(Error = "Duplicate")
         
+
+
+        #checks through given conditions to reject and accept rows
+        for i in condition:
+            rejected_row = pd.concat([rejected_row,accepted_row[~eval(i)]])
+            accepted_row = accepted_row[eval(i)]
+        
+        #saves processed data
         accepted_row.to_csv('data\\processed\\clean_data.csv')
         rejected_row.to_csv('data\\processed\\rejected_data.csv')

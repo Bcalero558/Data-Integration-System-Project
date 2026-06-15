@@ -4,15 +4,15 @@ format_str = ["Age","Gender","Weight (kg)","Height (m)","Max_BPM","Avg_BPM","Res
 file_name = "data\\raw\\gym_members_exercise_tracking.csv"
 reading = reader.ReadData("ETL.log")
 data = reading.read_csv(file_name,format_str)
-conditions = [(data["Age"] < 100), (data["Max_BPM"] < 220),(data["Resting_BPM"] > 30)]
+conditions = ["data[\"Age\"] < 100" , "data[\"Max_BPM\"] < 220" , "data[\"Resting_BPM\"] > 30"]
 validator = validate.Validator(data)
 
 validator.validate_rows(conditions,data)
 data = reading.read_csv("data\\processed\\clean_data.csv",format_str)
-
+"""
 transfer = database.DatabaseOperations(data)
 db = transfer.connect_to_database()
 transfer.create_table(db)
 transfer.insert_data(db)
-
+"""
 print(data)
