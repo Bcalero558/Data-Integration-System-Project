@@ -18,13 +18,13 @@ class ReadData:
 
 
     # reads csv files
-    def read_csv(self,filename):
+    def read_csv(self,filename,format_list):
         try:
             csv_data = pd.read_csv(filename)
         except Exception as e:
             self.logger.Error("Error: Reading CSV File")
         else:
 
-            return csv_data[["Age","Gender","Weight (kg)","Height (m)","Max_BPM","Avg_BPM","Resting_BPM","Session_Duration (hours)","Calories_Burned","Workout_Type","Fat_Percentage","Water_Intake (liters)","Workout_Frequency (days/week)","Experience_Level","BMI"]]
+            return csv_data[format_list]
 
     
