@@ -10,7 +10,6 @@ class DatabaseOperations:
         self.data = data
 
     #connect to postgres
-    #todo:
     def connect_to_database(self):
         try:
             conn = psycopg2.connect(
@@ -30,6 +29,7 @@ class DatabaseOperations:
         cursor = conn.cursor()
         cursor.execute(
         """
+            DROP TABLE IF EXISTS members;
             CREATE TABLE IF NOT EXISTS members(
             id SERIAL PRIMARY KEY,
             age INT NOT NULL,
