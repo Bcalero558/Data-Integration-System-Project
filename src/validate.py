@@ -27,7 +27,7 @@ class Validator:
 
         #checks through given conditions to reject and accept rows
         for i in condition:
-            rejected_row = pd.concat([rejected_row,accepted_row[~eval(i)]])
+            rejected_row = pd.concat([rejected_row,accepted_row[~eval(i)].assign(error = i)])
             accepted_row = accepted_row[eval(i)]
         
         #saves processed data
