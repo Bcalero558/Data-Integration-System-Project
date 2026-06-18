@@ -31,6 +31,7 @@ class DatabaseOperations:
             cursor = conn.cursor()
             cursor.execute(
             """
+                DROP TABLE IF EXISTS members;
                 CREATE TABLE IF NOT EXISTS members(
                 id SERIAL PRIMARY KEY,
                 age INT NOT NULL,
@@ -62,10 +63,12 @@ class DatabaseOperations:
         try:
             data_list = data.to_records(index = False)
             query = """
+            
             INSERT INTO members (
             age,gender,weight,height,max_bpm,avg_bpm,resting_bpm,session_duration,
             calories_burned,workout_type,fat_percentage,water_intake,Workout_Frequency,
             experience_level,bmi) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+
             """
             
         

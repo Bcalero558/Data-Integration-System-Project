@@ -1,6 +1,6 @@
 import pandas as pd
-
-"""TODO:
+import logging
+"""
     Removes invalid data and stores away elsewhere such as 
     Max_BPM < 220 
     resting bpm > 30
@@ -13,23 +13,28 @@ class Validator:
     def __init__(self,df):
         self.data= df.copy
         
-    # TODO:cleans and formats data for proper use
+    #cleans and formats data for proper use and validates a list of conditional strings
     def validate_rows(self, condition,data) :
-
+        try:    
         #determines if there are any duplicates in the data
-        duplicates = data.duplicated()
+            duplicates = data.duplicated()
 
         #accepts data without duplicates and saves data with duplicates
-        accepted_row = data.drop_duplicates( keep ='first')
-        rejected_row = data[duplicates].assign(Error = "Duplicate")
+            accepted_row = data.drop_duplicates( keep ='first')
+            rejected_row = data[duplicates].assign(Error = "Duplicate")
         
 
 
         #checks through given conditions to reject and accept rows
-        for i in condition:
-            rejected_row = pd.concat([rejected_row,accepted_row[~eval(i)].assign(error = i)])
-            accepted_row = accepted_row[eval(i)]
+            for i in condition:
+                rejected_row = pd.concat([rejected_row,accepted_row[~eval(i)].assign(error = i)])
+                accepted_row = accepted_row[eval(i)]
         
         #saves processed data
-        accepted_row.to_csv('data\\processed\\clean_data.csv')
-        rejected_row.to_csv('data\\processed\\rejected_data.csv')
+            accepted_row.to_csv('data\\processed\\clean_data.csv')
+            rejected_row.to_csv('data\\processed\\rejected_data.csv')
+        except:
+            logging.error("Validation error")
+        else:
+            logging.info("Data Validated")
+
