@@ -3,7 +3,7 @@ import json
 import logging
 
 class ReadData:
-    logger = None
+    
     
     #initial setup gets log file name from construction
     def __init__(self,log_file):
@@ -21,10 +21,14 @@ class ReadData:
     def read_csv(self,filename,format_list):
         try:
             csv_data = pd.read_csv(filename)
+            final = csv_data[format_list]
         except Exception as e:
-            self.logger.Error("Error: Reading CSV File")
+            logging.error("Issue With Reading CSV File")
         else:
+            logging.info("CSV File Read Successfully")
+            return final
 
-            return csv_data[format_list]
+
+           
 
     
