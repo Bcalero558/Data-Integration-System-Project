@@ -1,7 +1,8 @@
 import psycopg2
-from src import reader, validate ,database
+from src import reader, validate ,database, visualize
 import logging
-
+import sys
+from PyQt5.QtWidgets import QApplication
 #TODO :  Make SQL Calls more modular, Add UI,add second table to be referenced
 
 logging.basicConfig(
@@ -10,6 +11,7 @@ logging.basicConfig(
  filemode='a',  # tells the root logger to append the logs (not save over)
  format='%(filename)s - %(levelname)s - %(message)s'  # tells the root logger how to format the logs
 )
+
 def main():
     #a list to store the format of the csv file columns
     gm_format_str = ["Age","Gender","Weight (kg)","Height (m)","Max_BPM","Avg_BPM","Resting_BPM","Session_Duration (hours)","Calories_Burned","Workout_Type","Fat_Percentage","Water_Intake (liters)","Workout_Frequency (days/week)","Experience_Level","BMI"]
@@ -43,9 +45,10 @@ def main():
     gm_transfer.create_table(gm_db)
     gm_transfer.insert_data(gm_db,gm_data)
 
+     
     #checks if it can find the data from postgres
     query = gm_transfer.query(gm_db)
-
+    
 
     print(query)
 if __name__ == "__main__":
