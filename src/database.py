@@ -2,6 +2,9 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 import pandas as pd
 import logging
+import json 
+import os
+
 class DatabaseOperations:
     data = pd.DataFrame()
     
@@ -10,20 +13,59 @@ class DatabaseOperations:
         self.logger = logging.getLogger(log_file)
         self.logger.setLevel(logging.DEBUG)
 
+
+    
+
+
+
+
+
+
+
+
     #connect to postgres
-    def connect_to_database(self):
+    def connect_to_database(self,host,port,username,password,database):
         try:
             conn = psycopg2.connect(
-                dbname = "ETL_pipeline_project",
-                user = "postgres",
-                password = "password",
-                host = "localhost",
-                port = "5432"
+                dbname = database,
+                user = username,
+                password = password,
+                host = host,
+                port = port
                 )
-            logging.info("Successful Connection")
+            logging.info(f"Connecting to PostgreSQL server:{host}:{port} as User {username}")
             return conn
         except Exception as e:
-            logging.error("Failed to Connect")
+            logging.error(f"Failed to Connect {password}, {username}, {host}, {port}, {database}")
+
+    def config_setup(self,config):
+        if config:
+            # Extract the environment variables
+            postgres_user = os.environ.get('POSTGRES_USER', 'postgres')
+            postgres_password = os.environ.get('POSTGRES_PASSWORD', 'password')
+            postgres_db = os.environ.get('POSTGRES_DB', 'ETL_pipeline_project')
+            
+
+    # Update the configuration with environment variables
+            config['connection']['username'] = postgres_user
+            config['connection']['password'] = postgres_password
+            config['database'] = postgres_db
+
+            host = config['connection']['host']
+            port = config['connection']['port']
+            username = config['connection']['username']
+            password = config['connection']['password']
+            database = config['database']
+
+             # Print the configuration settings
+            logging.info(f'Postgres Info = Host: {host}, Port: {port}, Username: {username}, Password: {password}, Database: {database}')
+
+                 # Establish a connection to the PostgreSQL database
+            return self.connect_to_database(host,port,username,password,database)
+        else:
+            logging.error("Failed to load configuration.")
+
+
 
     #Create table
     def create_table(self,conn):
@@ -63,7 +105,7 @@ class DatabaseOperations:
         try:
             data_list = data.to_records(index = False)
             query = """
-            
+
             INSERT INTO members (
             age,gender,weight,height,max_bpm,avg_bpm,resting_bpm,session_duration,
             calories_burned,workout_type,fat_percentage,water_intake,Workout_Frequency,
@@ -104,7 +146,10 @@ class DatabaseOperations:
     def query(self,conn):
         try:
             query = "SELECT * FROM members"
-            return pd.read_sql(query, conn)
-            logging.info("Data Read")
+            result =  pd.read_sql(query, conn)
         except:
             logging.error("Data Not Found")
+        else:
+            logging.info("Data Read")
+            return result
+

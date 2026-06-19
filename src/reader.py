@@ -28,6 +28,26 @@ class ReadData:
             logging.info("CSV File Read Successfully")
             return final
 
+    #reads data from JSON file
+    def load_config(self,config_file_path):
+        try:
+            with open(config_file_path, 'r') as file:
+                config_data = file.read()
+                config_dict = json.loads(config_data)
+
+
+
+        except FileNotFoundError:
+            logging.error("Config File Not Found")
+            return None
+        except json.JSONDecodeError as e:
+            logging.error("JSON Reading Error")
+            return None
+        else:
+            logging.info("Config File Read Successfully")
+            return config_dict
+
+
 
            
 
