@@ -40,10 +40,17 @@ class DatabaseOperations:
 
     def config_setup(self,config):
         if config:
+            """ $env:POSTGRES_HOST = 'localhost'
+                $env:POSTGRES_PORT = '5432'
+                $env:POSTGRES_DB = 'ETL_pipeline_project'
+                $env:POSTGRES_USER = 'postgres'
+                $env:POSTGRES_PASSWORD = 'postgres'
+                example of what to put in the terminal to make the file to function
+                """
             # Extract the environment variables
-            postgres_user = os.environ.get('POSTGRES_USER', 'postgres')
-            postgres_password = os.environ.get('POSTGRES_PASSWORD', 'password')
-            postgres_db = os.environ.get('POSTGRES_DB', 'ETL_pipeline_project')
+            postgres_user = os.environ.get('POSTGRES_USER', 'default_value')
+            postgres_password = os.environ.get('POSTGRES_PASSWORD', 'default_value')
+            postgres_db = os.environ.get('POSTGRES_DB', 'default_value')
             
 
     # Update the configuration with environment variables
@@ -67,7 +74,7 @@ class DatabaseOperations:
 
 
 
-    #Create table
+    #Create table TODO: Change to make it accept arguments to make any table
     def create_table(self,conn):
         try:
             cursor = conn.cursor()
@@ -100,10 +107,12 @@ class DatabaseOperations:
             logging.error("Table Not Created")
             
 
-    #add elements to table
+    #add elements to table TODO make Data adaptable to any data not just this data set
     def insert_data(self,conn,data):
         try:
+            #makes the values from data into a list
             data_list = data.to_records(index = False)
+            #makes a placeholder string for SQL Code
             query = """
 
             INSERT INTO members (
@@ -113,7 +122,7 @@ class DatabaseOperations:
 
             """
             
-        
+            #Executes the query string in SQL replacing values with what is given
             with conn.cursor() as cursor:
                 cursor.executemany(
                     query,
@@ -135,6 +144,7 @@ class DatabaseOperations:
                             int(row["Experience_Level"]),
                             float(row["BMI"])
                         )
+                        #continues while there are rows of data
                         for row in data_list
                     ],
                 )
@@ -143,9 +153,13 @@ class DatabaseOperations:
         except:
             logging.error("Failed to Insert Data")
 
+
+
+
+        #TODO make it so that this can be used by any database
     def query(self,conn):
         try:
-            query = "SELECT * FROM members"
+            query = "SELECT * FROM members LIMIT 10"
             result =  pd.read_sql(query, conn)
         except:
             logging.error("Data Not Found")
