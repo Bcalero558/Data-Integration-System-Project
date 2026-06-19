@@ -2,14 +2,13 @@ import psycopg2
 from src import reader, validate ,database
 import logging
 
-#TODO : add Config file, Make SQL Calls more modular, Add UI,
-#add second table to be referenced
+#TODO :  Make SQL Calls more modular, Add UI,add second table to be referenced
 
 logging.basicConfig(
  level=logging.DEBUG,  # sets the root logging level 
  filename='ETL.log',  # tells the root logger where to save the log file (relative path)
  filemode='a',  # tells the root logger to append the logs (not save over)
- format='%(name)s - %(levelname)s - %(message)s'  # tells the root logger how to format the logs
+ format='%(filename)s - %(levelname)s - %(message)s'  # tells the root logger how to format the logs
 )
 def main():
     #a list to store the format of the csv file columns
