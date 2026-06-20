@@ -13,16 +13,6 @@ class DatabaseOperations:
         self.logger = logging.getLogger(log_file)
         self.logger.setLevel(logging.DEBUG)
 
-
-    
-
-
-
-
-
-
-
-
     #connect to postgres
     def connect_to_database(self,host,port,username,password,database):
         try:
@@ -38,15 +28,17 @@ class DatabaseOperations:
         except Exception as e:
             logging.error(f"Failed to Connect {password}, {username}, {host}, {port}, {database}")
 
+
     def config_setup(self,config):
         if config:
-            """ $env:POSTGRES_HOST = 'localhost'
+            """example of what to put in the terminal to make the file to function
+
+                $env:POSTGRES_HOST = 'localhost'
                 $env:POSTGRES_PORT = '5432'
                 $env:POSTGRES_DB = 'ETL_pipeline_project'
                 $env:POSTGRES_USER = 'postgres'
                 $env:POSTGRES_PASSWORD = 'postgres'
-                example of what to put in the terminal to make the file to function
-                """
+            """
             # Extract the environment variables
             postgres_user = os.environ.get('POSTGRES_USER', 'default_value')
             postgres_password = os.environ.get('POSTGRES_PASSWORD', 'default_value')
