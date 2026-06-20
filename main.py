@@ -1,8 +1,7 @@
 import psycopg2
-from src import reader, validate ,database, visualize
+from src import reader, validate ,database
 import logging
 import sys
-from PyQt5.QtWidgets import QApplication
 #TODO :  Make SQL Calls more modular, Add UI,add second table to be referenced
 
 logging.basicConfig(
@@ -13,6 +12,8 @@ logging.basicConfig(
 )
 
 def main():
+
+
     #a list to store the format of the csv file columns
     gm_format_str = ["Age","Gender","Weight (kg)","Height (m)","Max_BPM","Avg_BPM","Resting_BPM","Session_Duration (hours)","Calories_Burned","Workout_Type","Fat_Percentage","Water_Intake (liters)","Workout_Frequency (days/week)","Experience_Level","BMI"]
    
@@ -30,7 +31,7 @@ def main():
     #read csv data
     gm_data = gm_reading.read_csv(gm_file_name,gm_format_str)
     #a list of conditionals saved as a string in order to use in the validator to save reason of rejection
-    gm_conditions = ["data[\"Age\"] < 100" , "data[\"Max_BPM\"] < 220" , "data[\"Resting_BPM\"] > 30"]
+    gm_conditions = ["data[\"Age\"] < 100" , "data[\"Max_BPM\"] < 220" , "data[\"Resting_BPM\"] > 30","data[\"Resting_BPM\"] < data[\"Max_BPM\"]", "data[\"Water_Intake (liters)\"] < 10.0" ,"data[\"Fat_Percentage\"] < 50.0"]
     #validate data to remove duplicates and logical error and changes data to cleaned csv
     gm_validator = validate.Validator(gm_data)
     gm_validator.validate_rows(gm_conditions,gm_data)
