@@ -41,10 +41,10 @@ export POSTGRES_PASSWORD='postgres'
 Run the ETL pipeline with the appropriate Python command for your project.
 
 ```bash
-python run_pipeline.py
+python ETL.py
 ```
 
-Replace `run_pipeline.py` with the main script filename if it differs.
+Replace `ETL.py` with the main script filename if it differs.
 
 ## Notes
 
