@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository contains an ETL pipeline for extracting, transforming, and loading data into a PostgreSQL database. The pipeline is designed to be run locally and can be configured using environment variables.
+This repository contains an ETL pipeline for extracting, transforming, and loading data into a PostgreSQL database.It uses the Gym member data set from Kaggle in order to showcase how to clean and push data to a sql server. The pipeline is designed to be run locally and can be configured using environment variables.
 
 ## Requirements
 
