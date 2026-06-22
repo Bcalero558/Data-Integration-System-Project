@@ -37,10 +37,10 @@ def main():
     gm_conditions = ["data[\"Age\"] < 100" , "data[\"Max_BPM\"] < 220" , "data[\"Resting_BPM\"] > 30","data[\"Resting_BPM\"] < data[\"Max_BPM\"]", "data[\"Water_Intake (liters)\"] < 10.0" ,"data[\"Fat_Percentage\"] < 50.0"]
     #validate data to remove duplicates and logical error and changes data to cleaned csv
     gm_validator = validate.Validator(gm_data)
-    gm_validator.validate_rows("data\\processed\\clean_data.csv",gm_data,gm_conditions)
-    gm_validator.validate_rows("data\\processed\\clean_exercises.csv",el_data)
+    gm_validator.validate_rows("data\\processed\\clean_data.csv",'w',gm_data,gm_conditions)
+    gm_validator.validate_rows("data\\processed\\clean_exercises.csv",'a',el_data)
     gm_data = reading.read_csv("data\\processed\\clean_data.csv",gm_format_str)
-    el_data = reading.read_csv("data\\processed\\clean_exercises.csv",gm_format_str)
+    el_data = reading.read_csv("data\\processed\\clean_exercises.csv",el_format_str)
 
 
     #enables database Operations

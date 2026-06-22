@@ -23,7 +23,7 @@ class ReadData:
             csv_data = pd.read_csv(filename)
             final = csv_data[format_list]
         except Exception as e:
-            logging.error("Issue With Reading CSV File")
+            logging.error(f"Issue With Reading CSV File at {filename}")
         else:
             logging.info("CSV File Read Successfully")
             return final
