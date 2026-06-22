@@ -26,7 +26,7 @@ class DatabaseOperations:
             logging.info(f"Connecting to PostgreSQL server:{host}:{port} as User {username}")
             return conn
         except Exception as e:
-            logging.error(f"Failed to Connect {password}, {username}, {host}, {port}, {database}")
+            logging.error(f"Failed to Connect {username}, {host}, {database}")
 
 
     def config_setup(self,config):
@@ -57,7 +57,7 @@ class DatabaseOperations:
             database = config['database']
 
              # Print the configuration settings
-            logging.info(f'Postgres Info = Host: {host}, Port: {port}, Username: {username}, Password: {password}, Database: {database}')
+            logging.info(f'Postgres Info = Host: {host}, Username: {username}, Database: {database}')
 
                  # Establish a connection to the PostgreSQL database
             return self.connect_to_database(host,port,username,password,database)
@@ -65,8 +65,7 @@ class DatabaseOperations:
             logging.error("Failed to load configuration.")
 
 
-
-    #Create table TODO: Change to make it accept arguments to make any table
+#creates table with modular name and columns
     def create_table(self,conn,table_name,*columns):
         try:
             cursor = conn.cursor()
@@ -83,7 +82,7 @@ class DatabaseOperations:
             logging.error("Table Not Created")
             
 
-    #add elements to table TODO make Data adaptable to any data not just this data set
+    #add elements to table
     def insert_data(self,conn,data,table_name):
         try:
             self.table_insert_params(data,conn,table_name)
@@ -94,8 +93,8 @@ class DatabaseOperations:
 
 
 
-        #TODO make it so that this can be used by any database
-    def query(self,conn, table_name):
+    #basic select function
+    def query_all(self,conn, table_name):
         try:
             query = f"SELECT * FROM {table_name} LIMIT 10"
             result =  pd.read_sql(query, conn)
