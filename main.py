@@ -37,8 +37,10 @@ def main():
     gm_conditions = ["data[\"Age\"] < 100" , "data[\"Max_BPM\"] < 220" , "data[\"Resting_BPM\"] > 30","data[\"Resting_BPM\"] < data[\"Max_BPM\"]", "data[\"Water_Intake (liters)\"] < 10.0" ,"data[\"Fat_Percentage\"] < 50.0"]
     #validate data to remove duplicates and logical error and changes data to cleaned csv
     gm_validator = validate.Validator(gm_data)
-    gm_validator.validate_rows(gm_conditions,gm_data)
+    gm_validator.validate_rows("data\\processed\\clean_data.csv",gm_data,gm_conditions)
+    gm_validator.validate_rows("data\\processed\\clean_exercises.csv",el_data)
     gm_data = reading.read_csv("data\\processed\\clean_data.csv",gm_format_str)
+    el_data = reading.read_csv("data\\processed\\clean_exercises.csv",gm_format_str)
 
 
     #enables database Operations
@@ -65,6 +67,7 @@ def main():
                 'bmi DECIMAL(4,2)'
     )
     gm_transfer.insert_data(gm_db,gm_data,gm_table_name)
+    #creates second table
     gm_transfer.create_table(gm_db,el_table_name,
                             'exercise_id SERIAL PRIMARY KEY',
                             "exercise_name VARCHAR(255)",
@@ -76,10 +79,10 @@ def main():
     gm_transfer.insert_data(gm_db,el_data,el_table_name)
 
     
-    #checks if it can find the data from postgres
-    query = gm_transfer.query(gm_db,gm_table_name)
+    #checks if it can retrieve the data from postgres
+    query = gm_transfer.query_all(gm_db,gm_table_name)
     logging.debug(query)
-    query = gm_transfer.query(gm_db,el_table_name)
+    query = gm_transfer.query_all(gm_db,el_table_name)
     logging.debug(query)
 if __name__ == "__main__":
     main()

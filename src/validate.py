@@ -14,7 +14,7 @@ class Validator:
         self.data= df.copy
         
     #cleans and formats data for proper use and validates a list of conditional strings
-    def validate_rows(self, condition,data) :
+    def validate_rows(self,filename,data,condition = [] ) :
         try:    
         #determines if there are any duplicates in the data
             duplicates = data.duplicated()
@@ -26,13 +26,14 @@ class Validator:
 
 
         #checks through given conditions to reject and accept rows
-            for i in condition:
-                rejected_row = pd.concat([rejected_row,accepted_row[~eval(i)].assign(error = i)])
-                accepted_row = accepted_row[eval(i)]
+            if condition:
+                for i in condition:
+                    rejected_row = pd.concat([rejected_row,accepted_row[~eval(i)].assign(error = i)])
+                    accepted_row = accepted_row[eval(i)]
         
         #saves processed data
-            accepted_row.to_csv('data\\processed\\clean_data.csv')
-            rejected_row.to_csv('data\\processed\\rejected_data.csv')
+            accepted_row.to_csv(filename)
+            rejected_row.to_csv('data\\processed\\rejected_data.csv', mode = 'a' , header = False)
         except:
             logging.error("Validation error")
         else:
