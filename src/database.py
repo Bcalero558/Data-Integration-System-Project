@@ -86,24 +86,47 @@ class DatabaseOperations:
     #add elements to table TODO make Data adaptable to any data not just this data set
     def insert_data(self,conn,data,table_name):
         try:
-            #makes the values from data into a list
+            self.table_insert_params(data,conn,table_name)
+            logging.info("Data Inserted")
+        except:
+            logging.error("Failed to Insert Data")
+    
+
+
+
+        #TODO make it so that this can be used by any database
+    def query(self,conn, table_name):
+        try:
+            query = f"SELECT * FROM {table_name} LIMIT 10"
+            result =  pd.read_sql(query, conn)
+        except:
+            logging.error("Data Not Found")
+        else:
+            logging.info("Data Read")
+            return result
+
+
+
+    #Changes Parameters depending on table
+    def table_insert_params(self,data,conn,table_name):
+          #makes the values from data into a list
             data_list = data.to_records(index = False)
             #makes a placeholder string for SQL Code
-            query = f"""
+            if(table_name == "members"):
+                query = f"""
 
-            INSERT INTO {table_name} (
-            age,gender,weight,height,max_bpm,avg_bpm,resting_bpm,session_duration,
-            calories_burned,workout_type,fat_percentage,water_intake,Workout_Frequency,
-            experience_level,bmi) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-
-            """
+                INSERT INTO {table_name} (
+                age,gender,weight,height,max_bpm,avg_bpm,resting_bpm,session_duration,
+                calories_burned,workout_type,fat_percentage,water_intake,Workout_Frequency,
+                experience_level,bmi) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                """
             
             #Executes the query string in SQL replacing values with what is given
-            with conn.cursor() as cursor:
-                cursor.executemany(
-                    query,
-                    [
-                        (
+                with conn.cursor() as cursor:
+                    cursor.executemany(
+                        query,
+                        [
+                            (
                             int(row["Age"]),
                             row["Gender"],
                             float(row["Weight (kg)"]),
@@ -119,27 +142,31 @@ class DatabaseOperations:
                             int(row["Workout_Frequency (days/week)"]),
                             int(row["Experience_Level"]),
                             float(row["BMI"])
-                        )
-                        #continues while there are rows of data
-                        for row in data_list
+                            )
+                            #continues while there are rows of data
+                            for row in data_list
+                    ],
+                )
+            elif(table_name == "exercises"):
+                query = f"""
+                        INSERT INTO {table_name}(exercise_name,exercise_type,description,muscle_group,equipment_needed)
+                        VALUES (%s,%s,%s,%s,%s)
+                        """
+                with conn.cursor() as cursor:
+                    cursor.executemany(
+                        query,
+                        [
+                            (
+                                 row["exercise_name"],
+                                 row["exercise_type"],
+                                 row["description"],
+                                 row["muscle_group"],
+                                 row["equipment_needed"]
+                                 
+                            )
+                            #continues while there are rows of data
+                            for row in data_list
                     ],
                 )
             conn.commit()
-            logging.info("Data Inserted")
-        except:
-            logging.error("Failed to Insert Data")
-
-
-
-
-        #TODO make it so that this can be used by any database
-    def query(self,conn):
-        try:
-            query = "SELECT * FROM members LIMIT 10"
-            result =  pd.read_sql(query, conn)
-        except:
-            logging.error("Data Not Found")
-        else:
-            logging.info("Data Read")
-            return result
 
