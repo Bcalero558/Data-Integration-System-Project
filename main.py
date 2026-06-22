@@ -16,7 +16,7 @@ def main():
 
     #a list to store the format of the csv file columns
     gm_format_str = ["Age","Gender","Weight (kg)","Height (m)","Max_BPM","Avg_BPM","Resting_BPM","Session_Duration (hours)","Calories_Burned","Workout_Type","Fat_Percentage","Water_Intake (liters)","Workout_Frequency (days/week)","Experience_Level","BMI"]
-   
+    gm_table_name = "members"
     #name  and path of the file
     gm_file_name = "data\\raw\\gym_members_exercise_tracking.csv"
 
@@ -43,8 +43,25 @@ def main():
     #configures and connects to database
     gm_db = gm_transfer.config_setup(config)
     #creates table and stores data to postgres
-    gm_transfer.create_table(gm_db)
-    gm_transfer.insert_data(gm_db,gm_data)
+    gm_transfer.create_table(gm_db,gm_table_name, 
+                'memberid SERIAL PRIMARY KEY', 
+                'age INT NOT NULL',
+                'gender VARCHAR(6)',
+                'weight DECIMAL(4,1)',
+                'height DECIMAL(3,2)',
+                'max_bpm INT NOT NULL',
+                'avg_bpm INT NOT NULL',
+                'resting_bpm INT NOT NULL',
+                'session_duration DECIMAL(3,2)',
+                'calories_burned DECIMAL(5,1)',
+                'workout_type VARCHAR(255)',
+                'fat_percentage DECIMAL(3,1)',
+                'water_intake DECIMAL(2,1)',
+                'Workout_Frequency INT NOT NULL',
+                'experience_level INT NOT NULL',
+                'bmi DECIMAL(4,2)'
+    )
+    gm_transfer.insert_data(gm_db,gm_data,gm_table_name)
 
      
     #checks if it can find the data from postgres
