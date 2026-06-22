@@ -1,0 +1,10 @@
+974,56,Female,58.0,1.68,168,156,74,1.59,1116.0,HIIT,15.5,2.7,5,3,20.55,Duplicate,
+975,56,Female,58.0,1.68,168,156,74,1.59,1116.0,HIIT,15.5,2.7,5,3,20.55,Duplicate,
+982,25,Male,66.6,1.61,184,166,56,1.38,1260.0,Strength,25.0,3.0,2,1,25.69,Duplicate,
+978,105,Female,58.0,1.68,168,156,60,1.59,1116.0,HIIT,15.5,2.7,5,3,20.55,,"data[""Age""] < 100"
+976,56,Female,58.0,1.68,240,156,74,1.59,1116.0,HIIT,15.5,2.7,5,3,20.55,,"data[""Max_BPM""] < 220"
+977,56,Female,58.0,1.68,168,156,5,1.59,1116.0,HIIT,15.5,2.7,5,3,20.55,,"data[""Resting_BPM""] > 30"
+981,25,Male,66.6,1.61,170,166,190,1.38,1260.0,Strength,25.0,3.0,2,1,25.69,,"data[""Resting_BPM""] < data[""Max_BPM""]"
+979,25,Male,66.6,1.61,184,166,56,1.38,1260.0,Strength,25.0,20.0,2,1,25.69,,"data[""Water_Intake (liters)""] < 10.0"
+980,25,Male,66.6,1.61,184,166,56,1.38,1260.0,Strength,60.0,3.0,2,1,25.69,,"data[""Fat_Percentage""] < 50.0"
+67,Ladder Drills,HIIT,"Move through agility ladder patterns: one-foot hops, two-feet jumps, in-and-out patterns. Maintain quick feet and light contact.","Legs, Coordination, Cardiovascular System",Agility Ladder,Duplicate
