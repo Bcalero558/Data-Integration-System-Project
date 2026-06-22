@@ -79,7 +79,7 @@ class DatabaseOperations:
             conn.commit()
             logging.info("Created Table Successfully")
         except:
-            logging.error("Table Not Created")
+            logging.error(f"Table {table_name} Not Created")
             
 
     #add elements to table
@@ -88,7 +88,7 @@ class DatabaseOperations:
             self.table_insert_params(data,conn,table_name)
             logging.info("Data Inserted")
         except:
-            logging.error("Failed to Insert Data")
+            logging.error(f"Failed to Insert Data at {table_name}")
     
 
 

@@ -17,15 +17,16 @@ class ReadData:
     
 
 
-    # reads csv files
+    # reads csv files, accepts a file name and column list
     def read_csv(self,filename,format_list):
         try:
             csv_data = pd.read_csv(filename)
             final = csv_data[format_list]
         except Exception as e:
+            #tells you which file was read
             logging.error(f"Issue With Reading CSV File at {filename}")
         else:
-            logging.info("CSV File Read Successfully")
+            logging.info(f"CSV File at {filename} Read Successfully")
             return final
 
     #reads data from JSON file
@@ -38,13 +39,13 @@ class ReadData:
 
 
         except FileNotFoundError:
-            logging.error("Config File Not Found")
+            logging.error(f"Config File Not Found at {config_file_path}")
             return None
         except json.JSONDecodeError as e:
-            logging.error("JSON Reading Error")
+            logging.error(f"JSON Reading Error at {config_file_path}")
             return None
         else:
-            logging.info("Config File Read Successfully")
+            logging.info(f"Config File {config_file_path} Read Successfully")
             return config_dict
 
 

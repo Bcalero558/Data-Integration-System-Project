@@ -2,7 +2,7 @@ import psycopg2
 from src import reader, validate ,database
 import logging
 import sys
-#TODO :  Make SQL Calls more modular, Add UI,add second table to be referenced
+#TODO : Add UI
 
 logging.basicConfig(
  level=logging.DEBUG,  # sets the root logging level 
@@ -19,6 +19,7 @@ def main():
     gm_table_name = "members"
     el_format_str = ["exercise_name","exercise_type","description","muscle_group","equipment_needed"]
     el_table_name = "exercises"
+    
     #name  and path of the file
     gm_file_name = "data\\raw\\gym_members_exercise_tracking.csv"
     el_file_name = "data\\raw\\Exercise_List.csv"
@@ -33,6 +34,7 @@ def main():
     #read csv data
     gm_data = reading.read_csv(gm_file_name,gm_format_str)
     el_data = reading.read_csv(el_file_name,el_format_str)
+
     #a list of conditionals saved as a string in order to use in the validator to save reason of rejection
     gm_conditions = ["data[\"Age\"] < 100" , "data[\"Max_BPM\"] < 220" , "data[\"Resting_BPM\"] > 30","data[\"Resting_BPM\"] < data[\"Max_BPM\"]", "data[\"Water_Intake (liters)\"] < 10.0" ,"data[\"Fat_Percentage\"] < 50.0"]
     #validate data to remove duplicates and logical error and changes data to cleaned csv
@@ -45,8 +47,10 @@ def main():
 
     #enables database Operations
     gm_transfer = database.DatabaseOperations('ETL.log')
+
     #configures and connects to database
     gm_db = gm_transfer.config_setup(config)
+
     #creates table and stores data to postgres
     gm_transfer.create_table(gm_db,gm_table_name, 
                 'member_id SERIAL PRIMARY KEY', 
@@ -67,7 +71,8 @@ def main():
                 'bmi DECIMAL(4,2)'
     )
     gm_transfer.insert_data(gm_db,gm_data,gm_table_name)
-    #creates second table
+
+    #creates and inserts data for second table
     gm_transfer.create_table(gm_db,el_table_name,
                             'exercise_id SERIAL PRIMARY KEY',
                             "exercise_name VARCHAR(255)",
