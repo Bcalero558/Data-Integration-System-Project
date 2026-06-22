@@ -1,8 +1,7 @@
-import psycopg2
 from src import reader, validate ,database
 import logging
 import sys
-#TODO : Add UI
+#TODO : Add UI, add a way to call database tables together, improve table data insertion
 
 logging.basicConfig(
  level=logging.DEBUG,  # sets the root logging level 
